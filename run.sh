@@ -4,7 +4,6 @@ docker container run \
     -p 3306:3306 \
     -d \
     --name maria_db \
-    --restart unless-stopped \
-    mariadb-rp4:latest
+    mariadb:latest
 
 #--network some_bridge_network \

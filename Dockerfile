@@ -1,4 +1,4 @@
-FROM arm32v7/alpine:3.9
+FROM arm32v7/alpine
 
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
@@ -9,7 +9,7 @@ RUN addgroup -S mysql && adduser -S  mysql -G mysql
 RUN mkdir /docker-entrypoint-initdb.d && \
     apk -U upgrade && \
     apk add --no-cache mariadb mariadb-client && \
-    apk add --no-cache tzdata pwgen bash su-exec
+    apk add --no-cache tzdata pwgen bash su-exec grep
 
 # comment out a few problematic configuration values
 RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/my.cnf && \
@@ -24,7 +24,7 @@ RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/my.cnf && \
 
 
 # comment out any "user" entires in the MySQL config ("docker-entrypoint.sh" or "--user" will handle user switching)
-RUN	sed -ri 's/^user\s/#&/' /etc/mysql/my.cnf /etc/mysql/conf.d/*; \
+RUN	sed -ri 's/^user\s/#&/' /etc/my.cnf /etc/conf.d/*; \
 # purge and re-create /var/lib/mysql with appropriate ownership
 	rm -rf /var/lib/mysql; \
 	mkdir -p /var/lib/mysql /var/run/mysqld; \
